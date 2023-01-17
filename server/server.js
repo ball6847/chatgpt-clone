@@ -85,7 +85,7 @@ A: `,
     // Return response from OpenAI API
     res.status(200).send({
       bot: response.data.choices[0].text,
-      limit: res.body.limit,
+      // limit: res.body.limit,
     });
   } catch (error) {
     // Log error and return a generic error message
@@ -113,7 +113,6 @@ app.post("/dalle", async (req, res) => {
     console.log(response.data.data[0].url);
     res.status(200).send({
       bot: response.data.data[0].url,
-      limit: res.body.limit,
     });
   } catch (error) {
     // Log error and return a generic error message

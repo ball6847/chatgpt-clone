@@ -52,7 +52,7 @@ const ChatView = () => {
    * @param {Event} e - The submit event of the form.
    */
   const sendMessage = async (e) => {
-    e.preventDefault();
+    e && e.preventDefault();
 
     const newMsg = formValue;
     const aiModel = selected;
@@ -98,6 +98,21 @@ const ChatView = () => {
     setThinking(false);
   };
 
+  const interceptEnterKey = (e) => {
+    // Get the code of pressed key
+    const keyCode = e.which || e.keyCode;
+
+    // 13 represents the Enter key
+    if (keyCode === 13 && !e.shiftKey) {
+      // Don't generate a new line
+      e.preventDefault();
+
+      // Do something else such as send the message to back-end
+      // ...
+      sendMessage();
+    }
+  };
+
   /**
    * Scrolls the chat area to the bottom when the messages array is updated.
    */
@@ -137,6 +152,7 @@ const ChatView = () => {
           className="chatview__textarea-message"
           value={formValue}
           onChange={(e) => setFormValue(e.target.value)}
+          onKeyDown={interceptEnterKey}
         />
         <button
           type="submit"
