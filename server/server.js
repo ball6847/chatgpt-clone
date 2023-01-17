@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import { Configuration, OpenAIApi } from "openai";
 import path from "path";
-import { rateLimitMiddleware } from "./middlewares/rateLimitMiddleware.js";
+// import { rateLimitMiddleware } from "./middlewares/rateLimitMiddleware.js";
 
 const filter = new Filter();
 
@@ -34,10 +34,10 @@ app.use(express.json());
 app.use(cors());
 
 // ratelimiter middleware function
-if (Boolean(process.env.RATE_LIMIT_ENABLED)) {
-  app.use("/davinci", rateLimitMiddleware);
-  app.use("/dalle", rateLimitMiddleware);
-}
+// if (Boolean(process.env.RATE_LIMIT_ENABLED)) {
+//   app.use("/davinci", rateLimitMiddleware);
+//   app.use("/dalle", rateLimitMiddleware);
+// }
 
 /**
  * POST /davinci
