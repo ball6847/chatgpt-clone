@@ -1,24 +1,23 @@
-import Redis from 'ioredis';
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
+import Redis from "ioredis";
 
 // Load environment variables from .env file
 try {
   dotenv.config();
 } catch (error) {
-  console.error('Error loading environment variables:', error);
+  console.error("Error loading environment variables:", error);
   process.exit(1);
 }
 
 const client = new Redis({
   host: process.env.REDIS_URL,
   port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASS
+  // password: process.env.REDIS_PASS
 });
 
 // Set the rate limit to 20 requests per day
 const rateLimit = parseInt(process.env.RATE_LIMIT, 10);
 const rateLimitPeriod = 24 * 60 * 60; // 24 hours
-
 
 export const rateLimitMiddleware = (req, res, next) => {
   // Get the user's email address from the request
@@ -28,7 +27,7 @@ export const rateLimitMiddleware = (req, res, next) => {
   client.get(email, (err, count) => {
     if (err) {
       console.error(err);
-      return res.status(500).send('Error checking rate limit');
+      return res.status(500).send("Error checking rate limit");
     }
 
     // Calculate the rate usage left
@@ -39,11 +38,11 @@ export const rateLimitMiddleware = (req, res, next) => {
     res.body = {};
     res.body.limit = rateUsageLeft - 1;
 
-    console.log(rateUsageLeft)
+    console.log(rateUsageLeft);
 
     // If the request count is above the rate limit, return an error
     if (count && rateUsageLeft <= 0) {
-      res.body.limit = 0
+      res.body.limit = 0;
       return res.status(429).send(res.body);
     }
 

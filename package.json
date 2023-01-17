@@ -25,8 +25,8 @@
     "timeago.js": "^4.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "server": "nodemon server/server.js",
+    "start": "PORT=3000 react-scripts start",
+    "server": "cd server && PORT=3001 nodemon server.js",
     "dev": "concurrently \"npm start\" \"npm run server\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
