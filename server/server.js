@@ -3,6 +3,7 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
 import { Configuration, OpenAIApi } from "openai";
+import path from "path";
 import { rateLimitMiddleware } from "./middlewares/rateLimitMiddleware.js";
 
 const filter = new Filter();
@@ -39,20 +40,10 @@ if (Boolean(process.env.RATE_LIMIT_ENABLED)) {
 }
 
 /**
- * GET /
- * Returns a simple message.
- */
-app.get("/", (req, res) => {
-  res.status(200).send({
-    message: "Hello World!",
-  });
-});
-
-/**
  * POST /davinci
  * Returns a response from OpenAI's text completion model.
  */
-app.post("/davinci", async (req, res) => {
+app.post("/api/davinci", async (req, res) => {
   // Validate request body
   if (!req.body.prompt) {
     return res.status(400).send({
@@ -100,7 +91,7 @@ A: `,
  * POST /dalle
  * Returns a response from OpenAI's image generation model.
  */
-app.post("/dalle", async (req, res) => {
+app.post("/api/dalle", async (req, res) => {
   const prompt = req.body.prompt;
 
   try {
@@ -121,6 +112,13 @@ app.post("/dalle", async (req, res) => {
       error: "Something went wrong",
     });
   }
+});
+
+app.use(express.static(path.join(process.cwd(), "build")));
+
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+app.get("*", (req, res) => {
+  res.sendFile(path.join(process.cwd() + "/build/index.html"));
 });
 
 // Start server
