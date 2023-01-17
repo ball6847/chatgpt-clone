@@ -33,8 +33,10 @@ app.use(express.json());
 app.use(cors());
 
 // ratelimiter middleware function
-app.use("/davinci", rateLimitMiddleware);
-app.use("/dalle", rateLimitMiddleware);
+if (Boolean(process.env.RATE_LIMIT_ENABLED)) {
+  app.use("/davinci", rateLimitMiddleware);
+  app.use("/dalle", rateLimitMiddleware);
+}
 
 /**
  * GET /
